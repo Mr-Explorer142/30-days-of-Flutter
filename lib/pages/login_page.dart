@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:thirty_days_of_flutter/utils/routes.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  String name = "";
+  bool changeButton = false;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +23,7 @@ class LoginPage extends StatelessWidget {
             Image.asset("assets/images/login_image.png", fit: BoxFit.cover),
             SizedBox(height: 20.0),
             Text(
-              "Welcome",
+              "Welcome $name",
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20.0),
@@ -31,6 +39,10 @@ class LoginPage extends StatelessWidget {
                       hintText: "Enter Name",
                       labelText: "Name",
                     ),
+                    onChanged: (value) {
+                      name = value;
+                      setState(() {});
+                    },
                   ),
                   TextFormField(
                     obscureText: true,
@@ -40,25 +52,62 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 40.0),
-                  ElevatedButton(
-                    onPressed: () => {
-                      Navigator.pushNamed(context, MyRoutes.homeRoute)
+                  InkWell(
+                    onTap: () async {
+                      setState(() {
+                        changeButton = true;
+                      });
+                      await Future.delayed(Duration(seconds: 1));
+                      Navigator.pushNamed(context, MyRoutes.homeRoute);
                     },
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size(150, 40),
-                      backgroundColor: Colors.deepPurpleAccent,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                    child: AnimatedContainer(
+                      duration: Duration(seconds: 1),
+                      width: changeButton ? 50 : 150,
+                      height: 50,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        // shape: changeButton ? BoxShape.circle : BoxShape.rectangle,
+                        color: Colors.deepPurple,
+                        borderRadius: BorderRadius.circular(
+                          changeButton ? 50 : 8,
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      "Login",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      child: changeButton
+                          ? Icon(
+                              Icons.done,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            )
+                          : Text(
+                              "Login",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
                     ),
                   ),
+                  // ElevatedButton(
+                  //   onPressed: () => {
+                  //     Navigator.pushNamed(context, MyRoutes.homeRoute),
+                  //   },
+                  //   style: ElevatedButton.styleFrom(
+                  //     minimumSize: Size(150, 50),
+                  //     backgroundColor: Colors.deepPurpleAccent,
+                  //     foregroundColor: Colors.white,
+                  //     shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //     ),
+                  //   ),
+                  //   child: Text(
+                  //     "Login",
+                  //     style: TextStyle(
+                  //       fontWeight: FontWeight.bold,
+                  //       fontSize: 18,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
